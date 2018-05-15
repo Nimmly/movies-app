@@ -1,14 +1,13 @@
 <template>
     <div>
         <h3>Store movies</h3>
-        <b-form @submit="storeMovie">
+        <b-form @submit.prevent="storeMovie">
             <b-form-group 
                     label="Title:"
                     >
                 <b-form-input 
                       type="text"
                       v-model="form.title"
-                      required
                       placeholder="title">
                 </b-form-input>
             </b-form-group>
@@ -18,7 +17,6 @@
             <b-form-input 
                       type="text"
                       v-model="form.director"
-                      required
                       placeholder="Enter director">
             </b-form-input>
         </b-form-group>
@@ -28,7 +26,6 @@
             <b-form-input 
                       type="text"
                       v-model="form.imageUrl"
-                      required
                       placeholder="Enter image URL">
             </b-form-input>
         </b-form-group>
@@ -38,7 +35,6 @@
             <b-form-input
                       type="text"
                       v-model="form.duration"
-                      required
                       placeholder="Enter duration">
             </b-form-input>
         </b-form-group>
@@ -48,7 +44,6 @@
             <b-form-input 
                       type="text"
                       v-model="form.releaseDate"
-                      required
                       placeholder="Enter release date">
             </b-form-input>
         </b-form-group>
@@ -58,20 +53,30 @@
             <b-form-input 
                       type="text"
                       v-model="form.genre"
-                      required
                       placeholder="Enter genre">
             </b-form-input>
         </b-form-group>
-        </b-form>
         <b-button type="submit" variant="primary">Submit</b-button>
-        <div>List of movies</div>
+        </b-form>
+        <div>List of movies
+        <div class='container'>
+        <movie-row
+         v-for="movie in movies"
+         :key="movie.id"
+         :movie="movie"/>
+        </div>
+        </div>
       
     </div>
 </template>
 
 <script>
-import {movies} from '../services/movies.js'
+import { movies } from '../services/movies.js'
+import MovieRow from './MovieRow.vue'
 export default {
+    components:{
+        MovieRow
+    },
     data(){
         return{
             form:{
@@ -81,7 +86,8 @@ export default {
                 duration: '',
                 releaseDate: '',
                 genre: ''
-            }
+            },
+            movies:[]
         }
     },
     beforeRouteEnter (to, from, next) {
@@ -94,7 +100,9 @@ export default {
   },
   methods:{
       storeMovie(){
-          movies.store(this.form)
+          movies.add(this.form).then(() => {
+              this.$router.push('/movies')
+          })
       }
   }
 }

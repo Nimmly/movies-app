@@ -7,7 +7,7 @@ export default class Movies{
     getAll(){
         return axios.get('movies')
     }
-    store(movie){
+    add(movie){
         return axios.post('movies', movie)
     }
 }
