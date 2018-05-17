@@ -1,5 +1,10 @@
 <template>
-    <div>
+    <div class="container">
+
+         <movie-search
+      @search-term-change="onSearchTermChanged"
+      class="mt-4"
+    />
         <h3>Store movies</h3>
         <b-form @submit.prevent="storeMovie">
             <b-form-group 
@@ -59,6 +64,7 @@
         <b-button type="submit" variant="primary">Submit</b-button>
         </b-form>
         <div>List of movies
+        
         <div class='container'>
         <movie-row
          v-for="movie in movies"
@@ -73,9 +79,11 @@
 <script>
 import { movies } from '../services/movies.js'
 import MovieRow from './MovieRow.vue'
+import MovieSearch from './MovieSearch.vue'
 export default {
     components:{
-        MovieRow
+        MovieRow,
+        MovieSearch
     },
     data(){
         return{
@@ -103,7 +111,13 @@ export default {
           movies.add(this.form).then(() => {
               this.$router.push('/movies')
           })
-      }
+      },
+      onSearchTermChanged(term) {
+      MoviesService.index(term)
+        .then(({ data }) => {
+          this.movies = data
+        })
+    },
   }
 }
 </script>

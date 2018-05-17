@@ -7,7 +7,10 @@
 </template>
 
 <script>
+import MovieSearch from '/MovieSearch.vue'
 export default {
 
+
+  
 }
 </script>
